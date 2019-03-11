@@ -1,33 +1,27 @@
+import { useQuery } from "react-apollo-hooks";
 import Layout from "../components/Layout";
+
+import { LATEST_MESSAGES_QUERY } from "../graphql/queries";
 import { Messages } from "../components/ui/Message";
-import ChatLayout from "../components/ui/ChatLayout";
 import Message from "../components/Message";
-import MessageInput from "../components/MessageInput";
+import ChatLayout from "../components/ui/ChatLayout";
 import { Button } from "react-bootstrap";
+import MessageInput from "../components/MessageInput";
+import useMe from "../hooks/useMe";
 
-export default function Chat() {
-  const messages = [
-    {
-      body: "Test Message",
-      author: {
-        name: "jrawsthorne",
-      },
-      created_at: "2019-03-11T20:10:00",
-      id: 1,
-    },
-  ];
-
-  const me = {
-    name: "jrawsthorne",
-  };
+function Chat() {
+  const { me } = useMe();
+  const { data } = useQuery(LATEST_MESSAGES_QUERY);
 
   return (
     <Layout fluid>
       <ChatLayout>
         <Messages>
-          {messages.map(message => (
-            <Message key={message.id} message={message} />
-          ))}
+          {data &&
+            data.messages &&
+            data.messages.map(message => (
+              <Message key={message.id} message={message} />
+            ))}
         </Messages>
         <form style={{ padding: 15 }}>
           <MessageInput me={me} />
@@ -39,3 +33,5 @@ export default function Chat() {
     </Layout>
   );
 }
+
+export default Chat;

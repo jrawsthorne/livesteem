@@ -1,7 +1,8 @@
-import { useQuery } from "react-apollo-hooks";
+import { useQuery, useSubscription } from "react-apollo-hooks";
 import Layout from "../components/Layout";
-
-import { LATEST_MESSAGES_QUERY } from "../graphql/queries";
+import _ from "lodash";
+import { LATEST_MESSAGES_QUERY, MORE_MESSAGES_QUERY } from "../graphql/queries";
+import { LATEST_MESSAGES_SUB } from "../graphql/subscriptions";
 import { Messages } from "../components/ui/Message";
 import Message from "../components/Message";
 import ChatLayout from "../components/ui/ChatLayout";
@@ -11,7 +12,37 @@ import useMe from "../hooks/useMe";
 
 function Chat() {
   const { me } = useMe();
-  const { data } = useQuery(LATEST_MESSAGES_QUERY);
+  const { data, fetchMore } = useQuery(LATEST_MESSAGES_QUERY);
+
+  // calculate what the after paramter should be for subscription
+
+  const minId =
+    data.messages && data.messages.length > 0
+      ? _.max(data.messages.map(message => message.id))
+      : null;
+
+  useSubscription(LATEST_MESSAGES_SUB, {
+    variables: {
+      after: minId,
+    },
+    onSubscriptionData: () => {
+      if (minId) {
+        fetchMore({
+          variables: {
+            after: minId,
+          },
+          query: MORE_MESSAGES_QUERY,
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (!fetchMoreResult) return prev;
+            return {
+              ...prev,
+              messages: [...fetchMoreResult.comments, ...prev.messages],
+            };
+          },
+        });
+      }
+    },
+  });
 
   return (
     <Layout fluid>

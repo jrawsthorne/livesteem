@@ -24,3 +24,20 @@ export const LATEST_MESSAGES_QUERY = gql`
   }
   ${MESSAGES_FRAGMENT}
 `;
+
+// Query to load messages created after a given ID.
+// Will be triggered on subscription update
+
+export const MORE_MESSAGES_QUERY = gql`
+  query moreMessages($after: Int!) {
+    comments(
+      order_by: { id: asc }
+      where: {
+        _and: [{ parent_id: { _eq: 69353917 } }, { id: { _gt: $after } }]
+      }
+    ) {
+      ...MessageInfo
+    }
+  }
+  ${MESSAGES_FRAGMENT}
+`;

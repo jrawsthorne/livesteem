@@ -7,6 +7,8 @@ const MessageInput = ({ className, me, form }) => (
     rows="2"
     className={className}
     placeholder={`Message as ${me.name}`}
+    onChange={e => form.setValues({ message: e.target.value })}
+    value={form.values.message}
   />
 );
 

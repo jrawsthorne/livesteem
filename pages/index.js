@@ -1,3 +1,9 @@
+import Layout from "../components/Layout";
+
 export default function Chat() {
-  return <h1>Chat</h1>;
+  return (
+    <Layout>
+      <h1>Chat</h1>
+    </Layout>
+  );
 }

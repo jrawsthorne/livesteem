@@ -2,6 +2,8 @@ import Layout from "../components/Layout";
 import { Messages } from "../components/ui/Message";
 import ChatLayout from "../components/ui/ChatLayout";
 import Message from "../components/Message";
+import MessageInput from "../components/MessageInput";
+import { Button } from "react-bootstrap";
 
 export default function Chat() {
   const messages = [
@@ -15,6 +17,10 @@ export default function Chat() {
     },
   ];
 
+  const me = {
+    name: "jrawsthorne",
+  };
+
   return (
     <Layout fluid>
       <ChatLayout>
@@ -23,6 +29,12 @@ export default function Chat() {
             <Message key={message.id} message={message} />
           ))}
         </Messages>
+        <form style={{ padding: 15 }}>
+          <MessageInput me={me} />
+          <Button style={{ marginTop: 15 }} type="submit">
+            Send
+          </Button>
+        </form>
       </ChatLayout>
     </Layout>
   );

@@ -1,7 +1,10 @@
+import "bootstrap/dist/css/bootstrap.min.css";
 import App, { Container } from "next/app";
 import Head from "next/head";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React from "react";
+import { ApolloProvider } from "react-apollo-hooks";
 import { createGlobalStyle } from "styled-components";
+import withApolloClient from "../lib/with-apollo-client";
 
 const GlobalStyles = createGlobalStyle`
   .container-fluid {
@@ -21,18 +24,20 @@ class MyApp extends App {
   }
 
   render() {
-    const { Component, pageProps } = this.props;
+    const { Component, pageProps, apolloClient } = this.props;
 
     return (
       <Container>
         <GlobalStyles />
-        <Head>
-          <title>LiveSteem</title>
-        </Head>
-        <Component {...pageProps} />
+        <ApolloProvider client={apolloClient}>
+          <Head>
+            <title>LiveSteem</title>
+          </Head>
+          <Component {...pageProps} />
+        </ApolloProvider>
       </Container>
     );
   }
 }
 
-export default MyApp;
+export default withApolloClient(MyApp);

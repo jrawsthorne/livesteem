@@ -1,0 +1,7 @@
+{
+  "name": "livesteem",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Jake Rawsthorne <jake@jakerawsthorne.co.uk>",
+  "license": "MIT"
+}

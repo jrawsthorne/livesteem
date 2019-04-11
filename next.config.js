@@ -4,7 +4,9 @@ const webpack = require("webpack");
 
 module.exports = withCSS({
   webpack(config) {
-    config.plugins.push(new webpack.EnvironmentPlugin(localEnv));
+    config.plugins.push(
+      new webpack.EnvironmentPlugin({ ...localEnv, ...process.env })
+    );
     return config;
   },
 });

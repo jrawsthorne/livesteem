@@ -11,10 +11,15 @@ export const LATEST_MESSAGES_SUB = gql`
     comments(
       order_by: { id: asc }
       where: {
-        _and: [{ parent_id: { _eq: 69353917 } }, { id: { _gt: $after } }]
+        parent: {
+          author_name: { _eq: "jrawsthorne-dev" }
+          permlink: { _eq: "first-live-chat-thread" }
+        }
+        id: { _gt: $after }
       }
     ) {
       id
+      body
     }
   }
 `;

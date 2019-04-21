@@ -17,7 +17,12 @@ export const LATEST_MESSAGES_QUERY = gql`
   query messages {
     messages: comments(
       order_by: { id: desc }
-      where: { parent_id: { _eq: 69353917 } }
+      where: {
+        parent: {
+          author_name: { _eq: "jrawsthorne-dev" }
+          permlink: { _eq: "first-live-chat-thread" }
+        }
+      }
     ) {
       ...MessageInfo
     }
@@ -33,7 +38,11 @@ export const MORE_MESSAGES_QUERY = gql`
     comments(
       order_by: { id: asc }
       where: {
-        _and: [{ parent_id: { _eq: 69353917 } }, { id: { _gt: $after } }]
+        parent: {
+          author_name: { _eq: "jrawsthorne-dev" }
+          permlink: { _eq: "first-live-chat-thread" }
+        }
+        id: { _gt: $after }
       }
     ) {
       ...MessageInfo
